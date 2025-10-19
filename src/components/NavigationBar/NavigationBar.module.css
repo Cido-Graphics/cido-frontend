@@ -4,6 +4,7 @@
     background: #000000;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 240px 0 240px; /* Figma 디자인에 맞춘 좌우 패딩 */
     position: fixed;
     top: 0;
@@ -20,7 +21,7 @@
   .navLinks {
     display: flex;
     gap: 60px; /* Figma 디자인에 맞춘 간격 */
-    margin-right: auto;
+    flex: 1;
   }
   
   .navLink {
@@ -40,6 +41,7 @@
     display: flex;
     gap: 24px;
     align-items: center;
+    flex-shrink: 0;
   }
   
   .icon {
@@ -80,10 +82,29 @@
     border: none;
   }
 
+  .activeButton {
+    box-shadow: 0 0 0 2px rgba(25, 24, 248, 0.5);
+    transform: scale(1.05);
+  }
+
+  .authWrapper {
+    display: grid;
+    grid-template-columns: 32px;
+    grid-template-rows: 32px;
+    overflow: visible;
+  }
+
+  .authWrapperItem {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
   .userMenu {
     display: flex;
     align-items: center;
     gap: 12px;
+    white-space: nowrap;
   }
 
   .userName {
@@ -279,6 +300,10 @@
   .mobileWorkButton {
     background-color: #1918f8;
     color: #ffffff;
+  }
+
+  .mobileNavButton.activeButton {
+    box-shadow: 0 0 0 2px rgba(25, 24, 248, 0.5);
   }
 
   /* Tablet & Mobile Menu 활성화 - 1660px 이하에서 햄버거 메뉴 표시 */

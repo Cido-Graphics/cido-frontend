@@ -1,0 +1,116 @@
+.uploadPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+}
+
+.main {
+  flex: 1;
+  padding: 40px 120px;
+  max-width: 1920px;
+  margin: 0 auto;
+  margin-top: clamp(80px, 8.33vw, 160px);
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 59px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  width: 405px;
+}
+
+.saveDraftButton,
+.nextButton {
+  height: 62px;
+  border-radius: 4px;
+  border: none;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveDraftButton {
+  width: 194px;
+  background-color: #424242;
+  color: #ffffff;
+}
+
+.saveDraftButton:hover {
+  background-color: #333333;
+}
+
+.nextButton {
+  width: 195px;
+  background-color: #1918f8;
+  color: #ffffff;
+}
+
+.nextButton:hover {
+  background-color: #1414c9;
+}
+
+.nextButton:disabled,
+.saveDraftButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 1440px) {
+  .main {
+    padding: 40px 60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .main {
+    padding: 24px 32px;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .rightPanel {
+    gap: 40px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .saveDraftButton {
+    flex: 1;
+  }
+
+  .nextButton {
+    flex: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 16px;
+  }
+
+  .saveDraftButton,
+  .nextButton {
+    font-size: 18px;
+    height: 50px;
+  }
+}
+

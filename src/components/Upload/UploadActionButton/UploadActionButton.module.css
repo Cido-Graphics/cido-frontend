@@ -1,0 +1,93 @@
+.actionButton {
+  width: 195px;
+  height: 126px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.actionButton:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.actionButton:active {
+  transform: translateY(-2px);
+}
+
+.iconContainer {
+  width: 44px;
+  height: 44px;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.actionButton:hover .iconContainer {
+  background-color: #1918f8;
+}
+
+.icon {
+  font-size: 24px;
+  filter: grayscale(100%);
+  transition: filter 0.2s ease;
+}
+
+.actionButton:hover .icon {
+  filter: grayscale(0%) brightness(200%);
+}
+
+.label {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #424242;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.actionButton:hover .label {
+  color: #1918f8;
+  font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .actionButton {
+    width: 100%;
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .actionButton {
+    height: 100px;
+    gap: 8px;
+  }
+
+  .iconContainer {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon {
+    font-size: 20px;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+}
+
