@@ -14,7 +14,6 @@ const DesignersPage = () => {
     "Product",
     "Graphic",
     "Motion",
-    "Product",
     "Illustration",
     "AI",
     "Craft",
