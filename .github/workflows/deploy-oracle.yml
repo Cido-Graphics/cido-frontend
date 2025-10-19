@@ -62,21 +62,22 @@ jobs:
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
             
-            # 모든 관련 프로세스 완전 종료
-            echo "Stopping all related processes..."
+            # PM2 프로세스만 정리
+            echo "Stopping PM2 processes..."
+            pm2 stop all 2>/dev/null || true
             pm2 delete all 2>/dev/null || true
-            pm2 kill 2>/dev/null || true
-            sudo pkill -9 -f "next" 2>/dev/null || true
-            sudo pkill -9 node 2>/dev/null || true
-            sudo fuser -k 3000/tcp 2>/dev/null || true
-            sudo fuser -k 8080/tcp 2>/dev/null || true
-            sleep 3
+            
+            # 포트 점유 프로세스만 정리
+            echo "Freeing ports 3000 and 8080..."
+            sudo lsof -ti:3000 | xargs -r sudo kill -9 2>/dev/null || true
+            sudo lsof -ti:8080 | xargs -r sudo kill -9 2>/dev/null || true
+            sleep 2
             
             echo "Verifying ports are free..."
             if sudo ss -tlnp | grep -q :3000; then
-              echo "ERROR: Port 3000 still in use!"
-              sudo ss -tlnp | grep :3000
-              exit 1
+              echo "WARNING: Port 3000 still in use, forcing cleanup..."
+              sudo fuser -k 3000/tcp 2>/dev/null || true
+              sleep 1
             fi
             
             # PM2로 새로 시작
