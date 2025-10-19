@@ -29,13 +29,9 @@ jobs:
               sudo npm install -g pm2
             fi
             
-            # 변경된 파일이 있을 때만 빌드
-            if git diff --name-only HEAD@{1} HEAD | grep -qE '\.(tsx?|jsx?|css|json)$'; then
-              echo "Code changes detected, rebuilding..."
-              npm run build
-            else
-              echo "No code changes, skipping build..."
-            fi
+            # 항상 빌드 (안정성 우선)
+            echo "Building production bundle..."
+            npm run build
             
             # Certbot 설치 (SSL 인증서용)
             if ! command -v certbot &> /dev/null; then
