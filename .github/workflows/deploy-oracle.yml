@@ -62,12 +62,22 @@ jobs:
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
             
-            # 포트 3000, 8080 점유 프로세스 모두 종료
-            echo "Killing all processes on ports 3000 and 8080..."
-            pm2 delete cido-frontend 2>/dev/null || true
+            # 모든 관련 프로세스 완전 종료
+            echo "Stopping all related processes..."
+            pm2 delete all 2>/dev/null || true
+            pm2 kill 2>/dev/null || true
+            sudo pkill -9 -f "next" 2>/dev/null || true
+            sudo pkill -9 node 2>/dev/null || true
             sudo fuser -k 3000/tcp 2>/dev/null || true
             sudo fuser -k 8080/tcp 2>/dev/null || true
-            sleep 1
+            sleep 3
+            
+            echo "Verifying ports are free..."
+            if sudo ss -tlnp | grep -q :3000; then
+              echo "ERROR: Port 3000 still in use!"
+              sudo ss -tlnp | grep :3000
+              exit 1
+            fi
             
             # PM2로 새로 시작
             echo "Starting Next.js with PM2..."
@@ -79,8 +89,11 @@ jobs:
             echo "Deployment completed successfully!"
             echo "=== PM2 Status ==="
             pm2 status
-            echo "=== PM2 Logs (last 20 lines) ==="
-            pm2 logs cido-frontend --lines 20 --nostream || echo "No logs available"
-            echo "=== Port 3000 Check ==="
-            netstat -tlnp | grep :3000 || echo "Nothing listening on port 3000"
+            echo "=== Port Status ==="
+            sudo ss -tlnp | grep :3000 || echo "Nothing listening on port 3000"
+            sudo ss -tlnp | grep :80 || echo "Nothing listening on port 80"
+            echo "=== PM2 Logs (last 30 lines) ==="
+            pm2 logs cido-frontend --lines 30 --nostream || echo "No logs available"
+            echo "=== Process Check ==="
+            ps aux | grep "next\|node" | grep -v grep || echo "No node processes found"
 
