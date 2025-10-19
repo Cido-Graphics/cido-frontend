@@ -10,12 +10,12 @@ export default function Footer() {
           홍익대학교 학생들의 실험적인 시도를, 세상과 연결하는 창의적 플랫폼.
         </div>
         <div className={styles.info}>
-          대표자: OOO | 010-0000-0000<br />
+          대표자: 홍성봉<br />
           서울특별시 동대문구 한천로6길 16 3층<br />
-          hsm@cidographics.com
+          hsm@cidofactory.com
         </div>
         <div className={styles.copyright}>
-          Copyright © SIDE. All Rights Reserved.
+          Copyright © cido. All Rights Reserved.
         </div>
         <div className={styles.links}>
           <a href="#" className={styles.link}>
