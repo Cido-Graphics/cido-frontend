@@ -62,14 +62,20 @@ jobs:
             }
             EOF
             
-            # 기존 HTTPS 설정 파일 제거
-            sudo rm -f /etc/nginx/sites-enabled/default
+            # 기존 모든 Nginx 설정 파일 제거
+            echo "Cleaning up old Nginx configurations..."
+            sudo rm -f /etc/nginx/sites-enabled/*
             sudo rm -f /etc/nginx/sites-available/default
+            sudo rm -f /etc/nginx/conf.d/cidofactory.com.conf
             
-            # Nginx 설정 활성화
-            sudo ln -sf /etc/nginx/sites-available/cidofactory.com /etc/nginx/sites-enabled/
-            sudo rm -f /etc/nginx/sites-enabled/default
-            sudo nginx -t && sudo systemctl reload nginx
+            # 새 설정 활성화
+            sudo ln -sf /etc/nginx/sites-available/cidofactory.com /etc/nginx/sites-enabled/cidofactory.com
+            
+            # Nginx 설정 검증 및 재시작
+            echo "Testing Nginx configuration..."
+            sudo nginx -t
+            echo "Restarting Nginx..."
+            sudo systemctl restart nginx
             
             # SSL 인증서 자동 발급 및 설정 (Let's Encrypt)
             echo "Setting up SSL certificate..."
