@@ -22,7 +22,20 @@ jobs:
             cd /home/ubuntu/cido-project/cido-frontend
             git pull origin main
             npm install
-            npm run build
+            
+            # PM2가 없으면 설치
+            if ! command -v pm2 &> /dev/null; then
+              echo "Installing PM2..."
+              sudo npm install -g pm2
+            fi
+            
+            # 변경된 파일이 있을 때만 빌드
+            if git diff --name-only HEAD@{1} HEAD | grep -qE '\.(tsx?|jsx?|css|json)$'; then
+              echo "Code changes detected, rebuilding..."
+              npm run build
+            else
+              echo "No code changes, skipping build..."
+            fi
             
             # Nginx 설정 생성 (80 포트를 3000 포트로 프록시)
             sudo tee /etc/nginx/sites-available/cidofactory.com > /dev/null <<'EOF'
