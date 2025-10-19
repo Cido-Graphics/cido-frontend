@@ -71,6 +71,21 @@ jobs:
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
             
+            # SSL 인증서 자동 발급 및 설정 (Let's Encrypt)
+            echo "Setting up SSL certificate..."
+            if ! sudo certbot certificates 2>/dev/null | grep -q "cidofactory.com"; then
+              echo "Installing SSL certificate for cidofactory.com..."
+              sudo certbot --nginx -d cidofactory.com -d www.cidofactory.com \
+                --non-interactive \
+                --agree-tos \
+                --email hsm@cidofactory.com \
+                --redirect
+              echo "SSL certificate installed successfully!"
+            else
+              echo "SSL certificate already exists, renewing if needed..."
+              sudo certbot renew --quiet
+            fi
+            
             # 방화벽 규칙 확인 및 추가
             echo "Configuring firewall..."
             sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
