@@ -62,17 +62,17 @@ jobs:
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
             
-            # PM2로 실행 중이면
-            if pm2 list | grep -q cido-frontend; then
-              echo "Restarting existing PM2 process..."
-              pm2 restart cido-frontend
-            # 그냥 node 프로세스면
-            else
-              echo "Starting new PM2 process..."
-              pkill -f "next\|node.*3000" || true
-              pm2 start npm --name "cido-frontend" -- start
-              pm2 save
-            fi
+            # 기존 프로세스 완전 종료
+            echo "Stopping any existing processes..."
+            pm2 stop cido-frontend || true
+            pm2 delete cido-frontend || true
+            pkill -f "next.*start" || true
+            sleep 2
+            
+            # 새로 시작
+            echo "Starting Next.js with PM2..."
+            pm2 start npm --name "cido-frontend" -- start
+            pm2 save
             
             echo "Deployment completed successfully!"
             echo "=== PM2 Status ==="
