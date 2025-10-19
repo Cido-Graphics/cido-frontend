@@ -113,8 +113,13 @@ jobs:
             echo "=== Port Status ==="
             sudo ss -tlnp | grep :3000 || echo "Nothing listening on port 3000"
             sudo ss -tlnp | grep :80 || echo "Nothing listening on port 80"
-            echo "=== PM2 Logs (last 30 lines) ==="
-            pm2 logs cido-frontend --lines 30 --nostream || echo "No logs available"
-            echo "=== Process Check ==="
-            ps aux | grep "next\|node" | grep -v grep || echo "No node processes found"
+            echo "=== Working Directory ==="
+            pwd
+            ls -la
+            echo "=== .next Directory ==="
+            ls -la .next 2>/dev/null || echo ".next directory not found!"
+            echo "=== PM2 Logs (last 50 lines) ==="
+            pm2 logs cido-frontend --lines 50 --nostream || echo "No logs available"
+            echo "=== Testing localhost ==="
+            curl -I http://localhost:3000 2>&1 | head -20
 
