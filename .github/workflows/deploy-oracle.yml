@@ -37,6 +37,13 @@ jobs:
               echo "No code changes, skipping build..."
             fi
             
+            # Certbot 설치 (SSL 인증서용)
+            if ! command -v certbot &> /dev/null; then
+              echo "Installing Certbot..."
+              sudo apt-get update -qq
+              sudo apt-get install -y certbot python3-certbot-nginx
+            fi
+            
             # Nginx 설정 생성 (80 포트를 3000 포트로 프록시)
             sudo tee /etc/nginx/sites-available/cidofactory.com > /dev/null <<'EOF'
             server {
@@ -61,6 +68,19 @@ jobs:
             sudo ln -sf /etc/nginx/sites-available/cidofactory.com /etc/nginx/sites-enabled/
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
+            
+            # 방화벽 규칙 확인 및 추가
+            echo "Configuring firewall..."
+            sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+            sudo iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+            sudo iptables -C INPUT -p tcp --dport 3000 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 3000 -j ACCEPT
+            
+            # iptables 규칙 저장
+            if command -v netfilter-persistent &> /dev/null; then
+              sudo netfilter-persistent save
+            elif command -v iptables-save &> /dev/null; then
+              sudo iptables-save | sudo tee /etc/iptables/rules.v4 > /dev/null
+            fi
             
             # PM2 프로세스만 정리
             echo "Stopping PM2 processes..."
