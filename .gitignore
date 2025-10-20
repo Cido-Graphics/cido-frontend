@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# old workflow (keep locally, not in git)
+.github/workflows/main_cido.yml
