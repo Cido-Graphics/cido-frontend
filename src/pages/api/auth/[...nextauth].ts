@@ -19,8 +19,10 @@ export default NextAuth({
       if (!account) return false;
       // Step 1: Send verification code to email
       try {
+        const BACKEND_URL =
+          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
         const res = await fetch(
-          "https://cidobackend-gaf0dte7ajbnfqb5.koreacentral-01.azurewebsites.net/api/users/send-verification",
+          `${BACKEND_URL}/api/users/send-verification`,
           {
             method: "POST",
             headers: {
@@ -41,8 +43,10 @@ export default NextAuth({
       }
       // Step 2: Verify code and register
       try {
+        const BACKEND_URL =
+          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
         const res = await fetch(
-          "https://cidobackend-gaf0dte7ajbnfqb5.koreacentral-01.azurewebsites.net/api/users/verify-and-register",
+          `${BACKEND_URL}/api/users/verify-and-register`,
           {
             method: "POST",
             headers: {
